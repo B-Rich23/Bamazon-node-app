@@ -154,10 +154,10 @@ function readUpdated() {
 }
 
 function updateStockItems() {
-    var query = "UPDATE products SET stock_items= " + order + " WHERE ?";
-    connection.query(query, { item_id: id }, function (err, res) {
+    var query = "UPDATE products SET stock_quantity = stock_quantity - (SELECT   SUM(units_ordered)) WHERE item_id = ?";
+    connection.query(query, id , function (err, res) {
         // console.table(res);
-        readUpdated();
+        readUpdatedAgain();
         //     console.log("Updating product stock_quantity...\n");
         //     connection.query(
         //         "UPDATE products SET WHERE ?",
@@ -171,6 +171,24 @@ function updateStockItems() {
         //         }
     });
 }
+
+function readUpdatedAgain() {
+    // console.log("\nWelcome to Bamazon.com!\n");
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        // updateStockItems();
+        // Log all results of the SELECT statement
+        // console.log(res);
+        // for (var i = 0; i < res.length; i++) {
+        // console.log(res.products);
+
+        // console.log("item_id: " + res[i].item_id + "|" + "product_name: " + res[i].product_name + "|" + "department_name: " + res[i].department_name + "|" + "price: " + res[i].price + "|" + "stock_quantity: " + res[i].stock_quantity);
+        // }
+        // runSearch();
+    });
+}
+
 
 // function deleteProduct() {
 //     console.log("Deleting all Musiq Soulchild...\n");
