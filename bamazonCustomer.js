@@ -56,7 +56,9 @@ function runSearch() {
             connection.query(query, { item_id: answer.id }, function (err, res) {
                 id = answer.id;
                 // product = res.product_name;
+                console.log("\n ");
                 console.table(res);
+                console.log("\n ");
 //                 for (var i = 0; i < res.length; i++) {
 //                     console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
 //                 }
@@ -95,17 +97,44 @@ function howMuch() {
         .then(function (answer) {
             var query = "SELECT stock_quantity FROM products WHERE ?";
             connection.query(query, { item_id: id }, function (err, res) {
+                console.log("\n ");
                 console.table(res);
-                if (res >= answer.quantity) {
-                    updateProducts();
+                console.log("\n ");
+                // console.log(res[0].stock_quantity);
+                order = answer.quantity;
+                // console.log(order);
+                // console.log(updateUnits);
+                // uniOrdered = res.units_ordered;
+                if (res[0].stock_quantity >= order) {
+                    updateUnits();
+                    console.log("Correct Charlie!");
                 }
                 else {
-                    console.log("Insufficient quantity!");
+                    console.log("\n Insufficient quantity!");
                     howMuch();
                 }
             })
         });
 };
+
+function updateUnits() {
+        var query = "UPDATE products SET units_ordered= " + order + " WHERE ?";
+        connection.query(query, { item_id: id }, function (err, res) {
+            console.table(res);
+//     console.log("Updating product stock_quantity...\n");
+//     connection.query(
+//         "UPDATE products SET WHERE ?",
+//         {
+//             artist: "Musiq Soulchild"
+//         },
+//         function (err, res) {
+//             console.log(res.affectedRows + " songs deleted!\n");
+//             // Call readProducts AFTER the DELETE completes
+//             readProducts();
+//         }
+        });
+}
+
 
 // function deleteProduct() {
 //     console.log("Deleting all Musiq Soulchild...\n");
