@@ -107,7 +107,7 @@ function howMuch() {
                 // uniOrdered = res.units_ordered;
                 if (res[0].stock_quantity >= order) {
                     updateUnits();
-                    console.log("Correct Charlie!");
+                    // console.log("Correct Charlie!");
                 }
                 else {
                     console.log("\n Insufficient quantity!");
@@ -120,7 +120,8 @@ function howMuch() {
 function updateUnits() {
         var query = "UPDATE products SET units_ordered= " + order + " WHERE ?";
         connection.query(query, { item_id: id }, function (err, res) {
-            console.table(res);
+            // console.table(res);
+            readUpdated();
 //     console.log("Updating product stock_quantity...\n");
 //     connection.query(
 //         "UPDATE products SET WHERE ?",
@@ -135,6 +136,41 @@ function updateUnits() {
         });
 }
 
+function readUpdated() {
+    // console.log("\nWelcome to Bamazon.com!\n");
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw err;
+        console.table(res);
+        updateStockItems();
+        // Log all results of the SELECT statement
+        // console.log(res);
+        // for (var i = 0; i < res.length; i++) {
+        // console.log(res.products);
+
+        // console.log("item_id: " + res[i].item_id + "|" + "product_name: " + res[i].product_name + "|" + "department_name: " + res[i].department_name + "|" + "price: " + res[i].price + "|" + "stock_quantity: " + res[i].stock_quantity);
+        // }
+        // runSearch();
+    });
+}
+
+function updateStockItems() {
+    var query = "UPDATE products SET stock_items= " + order + " WHERE ?";
+    connection.query(query, { item_id: id }, function (err, res) {
+        // console.table(res);
+        readUpdated();
+        //     console.log("Updating product stock_quantity...\n");
+        //     connection.query(
+        //         "UPDATE products SET WHERE ?",
+        //         {
+        //             artist: "Musiq Soulchild"
+        //         },
+        //         function (err, res) {
+        //             console.log(res.affectedRows + " songs deleted!\n");
+        //             // Call readProducts AFTER the DELETE completes
+        //             readProducts();
+        //         }
+    });
+}
 
 // function deleteProduct() {
 //     console.log("Deleting all Musiq Soulchild...\n");
