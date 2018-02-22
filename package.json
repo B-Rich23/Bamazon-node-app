@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/B-Rich23/Bamazon-node-app#readme",
   "dependencies": {
+    "console.table": "^0.10.0",
     "inquirer": "^5.1.0",
     "mysql": "^2.15.0"
   }
