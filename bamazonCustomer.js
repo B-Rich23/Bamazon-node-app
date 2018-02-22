@@ -1,6 +1,7 @@
 var mysql = require("mysql");
 var inquirer = require("inquirer");
 const cTable = require('console.table');
+var product;
 
 
 var connection = mysql.createConnection({
@@ -53,6 +54,8 @@ function runSearch() {
         .then(function (answer) {
             var query = "SELECT * FROM products WHERE ?";
             connection.query(query, { item_id: answer.id }, function (err, res) {
+                id = answer.id;
+                // product = res.product_name;
                 console.table(res);
 //                 for (var i = 0; i < res.length; i++) {
 //                     console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
@@ -77,9 +80,47 @@ function runSearch() {
             //     case "Find artists with a top song and top album in the same year":
             //         songAndAlbumSearch();
             //         break;
+            howMuch();
             })
         });
 };
+
+function howMuch() {
+    inquirer
+        .prompt({
+            name: "quantity",
+            type: "input",
+            message: "How many units of this product would you like to buy?",
+        })
+        .then(function (answer) {
+            var query = "SELECT stock_quantity FROM products WHERE ?";
+            connection.query(query, { item_id: id }, function (err, res) {
+                console.table(res);
+                if (res >= answer.quantity) {
+                    updateProducts();
+                }
+                else {
+                    console.log("Insufficient quantity!");
+                    howMuch();
+                }
+            })
+        });
+};
+
+// function deleteProduct() {
+//     console.log("Deleting all Musiq Soulchild...\n");
+//     connection.query(
+//         "DELETE FROM songs WHERE ?",
+//         {
+//             artist: "Musiq Soulchild"
+//         },
+//         function (err, res) {
+//             console.log(res.affectedRows + " songs deleted!\n");
+//             // Call readProducts AFTER the DELETE completes
+//             readProducts();
+//         }
+//     );
+// }
 
 // function artistSearch() {
 //     inquirer
