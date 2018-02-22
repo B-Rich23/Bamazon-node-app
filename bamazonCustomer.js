@@ -21,7 +21,7 @@ connection.connect(function (err) {
 });
 
 function readProducts() {
-    console.log("Welcome to Bamazon.com!\n");
+    console.log("\nWelcome to Bamazon.com!\n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         console.table(res);
@@ -32,48 +32,54 @@ function readProducts() {
             
             // console.log("item_id: " + res[i].item_id + "|" + "product_name: " + res[i].product_name + "|" + "department_name: " + res[i].department_name + "|" + "price: " + res[i].price + "|" + "stock_quantity: " + res[i].stock_quantity);
         // }
-        // runSearch();
+        runSearch();
     });
 }
 
-// function runSearch() {
-//     inquirer
-//         .prompt({
-//             name: "action",
-//             type: "rawlist",
-//             message: "What would you like to do?",
-//             choices: [
-//                 "Find songs by artist",
-//                 "Find all artists who appear more than once",
-//                 "Find data within a specific range",
-//                 "Search for a specific song",
-//                 "Find artists with a top song and top album in the same year"
-//             ]
-//         })
-//         .then(function (answer) {
-//             switch (answer.action) {
-//                 case "Find songs by artist":
-//                     artistSearch();
-//                     break;
+function runSearch() {
+    inquirer
+        .prompt({
+            name: "id",
+            type: "input",
+            message: "What is the ID of the product you would like to buy?",
+            // choices: [
+            //     "Find songs by artist",
+            //     "Find all artists who appear more than once",
+            //     "Find data within a specific range",
+            //     "Search for a specific song",
+            //     "Find artists with a top song and top album in the same year"
+            // ]
+        })
+        .then(function (answer) {
+            var query = "SELECT * FROM products WHERE ?";
+            connection.query(query, { item_id: answer.id }, function (err, res) {
+                console.table(res);
+//                 for (var i = 0; i < res.length; i++) {
+//                     console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
+//                 }
+            // switch (answer.action) {
+            //     case "Find songs by artist":
+            //         artistSearch();
+            //         break;
 
-//                 case "Find all artists who appear more than once":
-//                     multiSearch();
-//                     break;
+            //     case "Find all artists who appear more than once":
+            //         multiSearch();
+            //         break;
 
-//                 case "Find data within a specific range":
-//                     rangeSearch();
-//                     break;
+            //     case "Find data within a specific range":
+            //         rangeSearch();
+            //         break;
 
-//                 case "Search for a specific song":
-//                     songSearch();
-//                     break;
+            //     case "Search for a specific song":
+            //         songSearch();
+            //         break;
 
-//                 case "Find artists with a top song and top album in the same year":
-//                     songAndAlbumSearch();
-//                     break;
-//             }
-//         });
-// }
+            //     case "Find artists with a top song and top album in the same year":
+            //         songAndAlbumSearch();
+            //         break;
+            })
+        });
+};
 
 // function artistSearch() {
 //     inquirer
