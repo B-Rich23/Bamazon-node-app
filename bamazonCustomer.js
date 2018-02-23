@@ -102,10 +102,10 @@ function readUpdatedAgain() {
         yourTotal = price * order;
         console.table(res);
         console.log("\nYour total is: $" + yourTotal);
-        updateUnitsOrdered();
+        resetUnitsOrdered();
     });
 }
-function updateUnitsOrdered() {
+function resetUnitsOrdered() {
     var query = "UPDATE products SET units_ordered = 0 WHERE item_id = ?";
     connection.query(query, id , function (err, res) {
         
