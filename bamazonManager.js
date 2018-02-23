@@ -40,16 +40,16 @@ function startApp() {
                     readProducts();
                     break;
 
-                // case "Find all artists who appear more than once":
-                //     multiSearch();
-                //     break;
+                case "View Low Inventory":
+                    multiSearch();
+                    break;
 
                 case "Add to Inventory":
                     // displayProducts();
                     runSearch();
                     break;
 
-                // case "Search for a specific song":
+                // case "Add New Product":
                 //     songSearch();
                 //     break;
             }
@@ -74,15 +74,17 @@ function startApp() {
 //         });
 // }
 
-// function multiSearch() {
-//     var query = "SELECT stock_quantity FROM top5000 GROUP BY artist HAVING count(*) > 1";
-//     connection.query(query, function (err, res) {
-//         for (var i = 0; i < res.length; i++) {
-//             console.log(res[i].artist);
-//         }
-//         runSearch();
-//     });
-// }
+function multiSearch() {
+    var query = "SELECT item_id, stock_quantity, product_name FROM products GROUP BY item_id HAVING stock_quantity < 5";
+    connection.query(query, function (err, res) {
+        // for (var i = 0; i < res.length; i++) {
+            // console.table(res[i].item_id);
+            console.log("\n ");
+            console.table(res);
+        // }
+        // runSearch();
+    });
+}
 
 // function rangeSearch() {
 //     inquirer
