@@ -26,13 +26,6 @@ function readProducts() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         console.table(res);
-        // Log all results of the SELECT statement
-        // console.log(res);
-        // for (var i = 0; i < res.length; i++) {
-            // console.log(res.products);
-            
-            // console.log("item_id: " + res[i].item_id + "|" + "product_name: " + res[i].product_name + "|" + "department_name: " + res[i].department_name + "|" + "price: " + res[i].price + "|" + "stock_quantity: " + res[i].stock_quantity);
-        // }
         runSearch();
     });
 }
@@ -43,45 +36,15 @@ function runSearch() {
             name: "id",
             type: "input",
             message: "What is the ID of the product you would like to buy?",
-            // choices: [
-            //     "Find songs by artist",
-            //     "Find all artists who appear more than once",
-            //     "Find data within a specific range",
-            //     "Search for a specific song",
-            //     "Find artists with a top song and top album in the same year"
-            // ]
         })
         .then(function (answer) {
             var query = "SELECT * FROM products WHERE ?";
             connection.query(query, { item_id: answer.id }, function (err, res) {
                 id = answer.id;
-                // product = res.product_name;
+                price = res[0].price;
                 console.log("\n ");
                 console.table(res);
                 console.log("\n ");
-//                 for (var i = 0; i < res.length; i++) {
-//                     console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
-//                 }
-            // switch (answer.action) {
-            //     case "Find songs by artist":
-            //         artistSearch();
-            //         break;
-
-            //     case "Find all artists who appear more than once":
-            //         multiSearch();
-            //         break;
-
-            //     case "Find data within a specific range":
-            //         rangeSearch();
-            //         break;
-
-            //     case "Search for a specific song":
-            //         songSearch();
-            //         break;
-
-            //     case "Find artists with a top song and top album in the same year":
-            //         songAndAlbumSearch();
-            //         break;
             howMuch();
             })
         });
@@ -100,17 +63,12 @@ function howMuch() {
                 console.log("\n ");
                 console.table(res);
                 console.log("\n ");
-                // console.log(res[0].stock_quantity);
                 order = answer.quantity;
-                // console.log(order);
-                // console.log(updateUnits);
-                // uniOrdered = res.units_ordered;
                 if (res[0].stock_quantity >= order) {
                     updateUnits();
-                    // console.log("Correct Charlie!");
                 }
                 else {
-                    console.log("\n Insufficient quantity!");
+                    console.log("\n Insufficient quantity!\n");
                     howMuch();
                 }
             })
@@ -120,219 +78,38 @@ function howMuch() {
 function updateUnits() {
         var query = "UPDATE products SET units_ordered= " + order + " WHERE ?";
         connection.query(query, { item_id: id }, function (err, res) {
-            // console.table(res);
             readUpdated();
-//     console.log("Updating product stock_quantity...\n");
-//     connection.query(
-//         "UPDATE products SET WHERE ?",
-//         {
-//             artist: "Musiq Soulchild"
-//         },
-//         function (err, res) {
-//             console.log(res.affectedRows + " songs deleted!\n");
-//             // Call readProducts AFTER the DELETE completes
-//             readProducts();
-//         }
         });
 }
 
 function readUpdated() {
-    // console.log("\nWelcome to Bamazon.com!\n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
-        console.table(res);
+        // console.table(res);
         updateStockItems();
-        // Log all results of the SELECT statement
-        // console.log(res);
-        // for (var i = 0; i < res.length; i++) {
-        // console.log(res.products);
-
-        // console.log("item_id: " + res[i].item_id + "|" + "product_name: " + res[i].product_name + "|" + "department_name: " + res[i].department_name + "|" + "price: " + res[i].price + "|" + "stock_quantity: " + res[i].stock_quantity);
-        // }
-        // runSearch();
     });
 }
 
 function updateStockItems() {
     var query = "UPDATE products SET stock_quantity = stock_quantity - (SELECT   SUM(units_ordered)) WHERE item_id = ?";
     connection.query(query, id , function (err, res) {
-        // console.table(res);
         readUpdatedAgain();
-        //     console.log("Updating product stock_quantity...\n");
-        //     connection.query(
-        //         "UPDATE products SET WHERE ?",
-        //         {
-        //             artist: "Musiq Soulchild"
-        //         },
-        //         function (err, res) {
-        //             console.log(res.affectedRows + " songs deleted!\n");
-        //             // Call readProducts AFTER the DELETE completes
-        //             readProducts();
-        //         }
     });
 }
-
 function readUpdatedAgain() {
-    // console.log("\nWelcome to Bamazon.com!\n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
+        yourTotal = price * order;
         console.table(res);
-        // updateStockItems();
-        // Log all results of the SELECT statement
-        // console.log(res);
-        // for (var i = 0; i < res.length; i++) {
-        // console.log(res.products);
-
-        // console.log("item_id: " + res[i].item_id + "|" + "product_name: " + res[i].product_name + "|" + "department_name: " + res[i].department_name + "|" + "price: " + res[i].price + "|" + "stock_quantity: " + res[i].stock_quantity);
-        // }
-        // runSearch();
+        console.log("\nYour total is: $" + yourTotal);
+        updateUnitsOrdered();
+    });
+}
+function updateUnitsOrdered() {
+    var query = "UPDATE products SET units_ordered = 0 WHERE item_id = ?";
+    connection.query(query, id , function (err, res) {
+        
+        
     });
 }
 
-
-// function deleteProduct() {
-//     console.log("Deleting all Musiq Soulchild...\n");
-//     connection.query(
-//         "DELETE FROM songs WHERE ?",
-//         {
-//             artist: "Musiq Soulchild"
-//         },
-//         function (err, res) {
-//             console.log(res.affectedRows + " songs deleted!\n");
-//             // Call readProducts AFTER the DELETE completes
-//             readProducts();
-//         }
-//     );
-// }
-
-// function artistSearch() {
-//     inquirer
-//         .prompt({
-//             name: "artist",
-//             type: "input",
-//             message: "What artist would you like to search for?"
-//         })
-//         .then(function (answer) {
-//             var query = "SELECT position, song, year FROM top5000 WHERE ?";
-//             connection.query(query, { artist: answer.artist }, function (err, res) {
-//                 for (var i = 0; i < res.length; i++) {
-//                     console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
-//                 }
-//                 runSearch();
-//             });
-//         });
-// }
-
-// function multiSearch() {
-//     var query = "SELECT artist FROM top5000 GROUP BY artist HAVING count(*) > 1";
-//     connection.query(query, function (err, res) {
-//         for (var i = 0; i < res.length; i++) {
-//             console.log(res[i].artist);
-//         }
-//         runSearch();
-//     });
-// }
-
-// function rangeSearch() {
-//     inquirer
-//         .prompt([{
-//             name: "start",
-//             type: "input",
-//             message: "Enter starting position: ",
-//             validate: function (value) {
-//                 if (isNaN(value) === false) {
-//                     return true;
-//                 }
-//                 return false;
-//             }
-//         },
-//         {
-//             name: "end",
-//             type: "input",
-//             message: "Enter ending position: ",
-//             validate: function (value) {
-//                 if (isNaN(value) === false) {
-//                     return true;
-//                 }
-//                 return false;
-//             }
-//         }
-//         ])
-//         .then(function (answer) {
-//             var query = "SELECT position,song,artist,year FROM top5000 WHERE position BETWEEN ? AND ?";
-//             connection.query(query, [answer.start, answer.end], function (err, res) {
-//                 for (var i = 0; i < res.length; i++) {
-//                     console.log(
-//                         "Position: " +
-//                         res[i].position +
-//                         " || Song: " +
-//                         res[i].song +
-//                         " || Artist: " +
-//                         res[i].artist +
-//                         " || Year: " +
-//                         res[i].year
-//                     );
-//                 }
-//                 runSearch();
-//             });
-//         });
-// }
-
-// function songSearch() {
-//     inquirer
-//         .prompt({
-//             name: "song",
-//             type: "input",
-//             message: "What song would you like to look for?"
-//         })
-//         .then(function (answer) {
-//             console.log(answer.song);
-//             connection.query("SELECT * FROM top5000 WHERE ?", { song: answer.song }, function (err, res) {
-//                 console.log(
-//                     "Position: " +
-//                     res[0].position +
-//                     " || Song: " +
-//                     res[0].song +
-//                     " || Artist: " +
-//                     res[0].artist +
-//                     " || Year: " +
-//                     res[0].year
-//                 );
-//                 runSearch();
-//             });
-//         });
-// }
-
-// function songAndAlbumSearch() {
-//     inquirer
-//         .prompt({
-//             name: "artist",
-//             type: "input",
-//             message: "What artist would you like to search for?"
-//         })
-//         .then(function (answer) {
-//             var query = "SELECT top_albums.year, top_albums.album, top_albums.position, top5000.song, top5000.artist ";
-//             query += "FROM top_albums INNER JOIN top5000 ON (top_albums.artist = top5000.artist AND top_albums.year ";
-//             query += "= top5000.year) WHERE (top_albums.artist = ? AND top5000.artist = ?) ORDER BY top_albums.year ";
-
-//             connection.query(query, [answer.artist, answer.artist], function (err, res) {
-//                 console.log(res.length + " matches found!");
-//                 for (var i = 0; i < res.length; i++) {
-//                     console.log(
-//                         "Album Position: " +
-//                         res[i].position +
-//                         " || Artist: " +
-//                         res[i].artist +
-//                         " || Song: " +
-//                         res[i].song +
-//                         " || Album: " +
-//                         res[i].album +
-//                         " || Year: " +
-//                         res[i].year
-//                     );
-//                 }
-
-//                 runSearch();
-//             });
-//         });
-// }
