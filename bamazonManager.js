@@ -45,6 +45,7 @@ function startApp() {
                 //     break;
 
                 case "Add to Inventory":
+                    // readProducts();
                     runSearch();
                     break;
 
@@ -177,7 +178,7 @@ function runSearch() {
                 console.log("\n ");
                 console.table(res);
                 console.log("\n ");
-                // howMuch();
+                howMuch();
             })
         });
 };
@@ -196,7 +197,7 @@ function howMuch() {
                 console.table(res);
                 console.log("\n ");
                 order = answer.quantity;
-                    updateStockItems();
+                    // updateStockItems();
             })
         });
 };
