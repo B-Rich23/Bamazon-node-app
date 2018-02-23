@@ -45,7 +45,7 @@ function startApp() {
                 //     break;
 
                 case "Add to Inventory":
-                    // readProducts();
+                    // displayProducts();
                     runSearch();
                     break;
 
@@ -197,7 +197,7 @@ function howMuch() {
                 console.table(res);
                 console.log("\n ");
                 order = answer.quantity;
-                    // updateStockItems();
+                    updateStockItems();
             })
         });
 };
@@ -220,7 +220,7 @@ function howMuch() {
 function updateStockItems() {
     var query = "UPDATE products SET stock_quantity = stock_quantity + " + order + " WHERE item_id = ?";
     connection.query(query, id, function (err, res) {
-        readProducts();
+        displayProducts();
     });
 };
 // function readUpdatedAgain() {
@@ -239,4 +239,11 @@ function updateStockItems() {
 
 //     });
 // }
+function displayProducts() {
+    console.log("\nInventory\n");
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw err;
+        console.table(res);
+    });
+}
 
