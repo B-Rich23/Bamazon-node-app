@@ -55,26 +55,26 @@ function startApp() {
         });
 }
 
-function artistSearch() {
-    inquirer
-        .prompt({
-            name: "artist",
-            type: "input",
-            message: "What artist would you like to search for?"
-        })
-        .then(function (answer) {
-            var query = "SELECT position, song, year FROM top5000 WHERE ?";
-            connection.query(query, { artist: answer.artist }, function (err, res) {
-                for (var i = 0; i < res.length; i++) {
-                    console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
-                }
-                runSearch();
-            });
-        });
-}
+// function artistSearch() {
+//     inquirer
+//         .prompt({
+//             name: "artist",
+//             type: "input",
+//             message: "What artist would you like to search for?"
+//         })
+//         .then(function (answer) {
+//             var query = "SELECT position, song, year FROM top5000 WHERE ?";
+//             connection.query(query, { artist: answer.artist }, function (err, res) {
+//                 for (var i = 0; i < res.length; i++) {
+//                     console.log("Position: " + res[i].position + " || Song: " + res[i].song + " || Year: " + res[i].year);
+//                 }
+//                 runSearch();
+//             });
+//         });
+// }
 
 function multiSearch() {
-    var query = "SELECT artist FROM top5000 GROUP BY artist HAVING count(*) > 1";
+    var query = "SELECT stock_quantity FROM top5000 GROUP BY artist HAVING count(*) > 1";
     connection.query(query, function (err, res) {
         for (var i = 0; i < res.length; i++) {
             console.log(res[i].artist);
