@@ -39,6 +39,8 @@ If a manager selects View Low Inventory, then it list all items with an inventor
 If a manager selects Add to Inventory, the app displays a prompt that will let the manager add more of any item currently in the store.
 If a manager selects Add New Product, it  allows them to add a completely new product to the store.
 
+Screenshot videos of working app are located in the video folder.
+
 Dependencies:
 
 mysql npm
