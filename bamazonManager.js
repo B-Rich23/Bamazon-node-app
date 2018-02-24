@@ -158,21 +158,22 @@ function addPrice() {
         })
         .then(function (answer) {
                 newPrice = answer.newPrice;
-                // addQuantity();
+                addQuantity();
     });
 }
-// function addQuantity() {
-//     inquirer
-//         .prompt({
-//             name: "newName",
-//             type: "input",
-//             message: "What is the new product name you want to create?",
-//         })
-//         .then(function (answer) {
-//                 newName = answer.newName;
-//                 createNewProduct();
-// });
 
+function addQuantity() {
+    inquirer
+        .prompt({
+            name: "newQuantity",
+            type: "input",
+            message: "What is the new quantity you want to set?",
+        })
+        .then(function (answer) {
+                newQuantity = answer.newQuantity;
+                // createNewProduct();
+    });
+}
 
 
 // function createNewProduct() {
