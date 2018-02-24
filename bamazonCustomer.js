@@ -101,15 +101,34 @@ function readUpdatedAgain() {
         if (err) throw err;
         yourTotal = price * order;
         console.table(res);
-        console.log("\nYour total is: $" + yourTotal);
+        console.log("\nYour total is: $" + yourTotal + "\n");
         resetUnitsOrdered();
     });
 }
 function resetUnitsOrdered() {
     var query = "UPDATE products SET units_ordered = 0 WHERE item_id = ?";
     connection.query(query, id , function (err, res) {
-        
-        
+       reRun(); 
     });
 }
+
+function reRun() {
+    inquirer
+        .prompt({
+            name: "restart",
+            type: "confirm",
+            message: "Do you want to continue?",
+        })
+        .then(function (answer) {
+            restart = answer.restart;
+            if (restart === true) {
+                console.log("\n");
+                readProducts();
+            }
+            else {
+                console.log("\nGood-bye!")
+            }
+        });
+}
+
 

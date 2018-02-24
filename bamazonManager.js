@@ -21,6 +21,7 @@ connection.connect(function (err) {
     startApp();
 });
 
+// Helper function that initializes the app
 function startApp() {
     inquirer
         .prompt({
@@ -35,6 +36,7 @@ function startApp() {
             ]
         })
         .then(function (answer) {
+            // Switch case for different inquirer selections
             switch (answer.action) {
                 case "View Products for Sale":
                     readProducts();
@@ -56,18 +58,7 @@ function startApp() {
         });
 }
 
-function multiSearch() {
-    var query = "SELECT item_id, stock_quantity, product_name FROM products GROUP BY item_id HAVING stock_quantity < 5";
-    connection.query(query, function (err, res) {
-        // for (var i = 0; i < res.length; i++) {
-            // console.table(res[i].item_id);
-            console.log("\n ");
-            console.table(res);
-        // }
-        // runSearch();
-    });
-}
-
+//Helper function that displays current inventory
 function readProducts() {
     console.log("\nInventory\n");
     connection.query("SELECT * FROM products", function (err, res) {
@@ -77,6 +68,17 @@ function readProducts() {
     });
 }
 
+//Helper function that filters all items that have a stock_quantity less than 5 
+function multiSearch() {
+    var query = "SELECT item_id, stock_quantity, product_name FROM products GROUP BY item_id HAVING stock_quantity < 5";
+    connection.query(query, function (err, res) {
+            console.log("\n ");
+            console.table(res);
+        runSearch();
+    });
+}
+
+//Helper function that captures the item_id of the product user wants to update 
 function runSearch() {
     inquirer
         .prompt({
@@ -97,6 +99,7 @@ function runSearch() {
         });
 };
 
+//Helper function that captures the number of units of the stock_quantity the user wants to replenish
 function howMuch() {
     inquirer
         .prompt({
@@ -116,6 +119,7 @@ function howMuch() {
         });
 };
 
+//Helper function that updates the stock_quantity with the units the user wants to replenish 
 function updateStockItems() {
     var query = "UPDATE products SET stock_quantity = stock_quantity + " + order + " WHERE item_id = ?";
     connection.query(query, id, function (err, res) {
@@ -123,6 +127,7 @@ function updateStockItems() {
     });
 };
 
+//Helper function that captures the product name of the product the user wants to create 
 function addProductName() {
     inquirer
         .prompt({
@@ -137,6 +142,7 @@ function addProductName() {
     });
 }
 
+//Helper function that captures the department name of the department the user wants to create 
 function addDeptName() {
     inquirer
         .prompt({
@@ -149,6 +155,9 @@ function addDeptName() {
                 addPrice();
     });
 }
+
+
+//Helper function that captures the price of the product the user wants to create 
 function addPrice() {
     inquirer
         .prompt({
@@ -162,6 +171,7 @@ function addPrice() {
     });
 }
 
+//Helper function that captures the quantity of the product the user wants to create 
 function addQuantity() {
     inquirer
         .prompt({
@@ -175,21 +185,42 @@ function addQuantity() {
     });
 }
 
-
+//Helper function that uses the different variables that we captured for creation of the new product to create the new product row in the table 
 function createNewProduct() {
     var query = "INSERT INTO products (product_name, department_name, price, stock_quantity, units_ordered) VALUES ('" + newName + "', '" + newDept + "', " + newPrice + ", " + newQuantity + ", 0)";
     connection.query(query, function (err, res) {
-        console.log(query);
         displayProducts();
-
     });
 };
 
+//Helper function that displays the newly updated inventory 
 function displayProducts() {
     console.log("\nInventory\n");
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         console.table(res);
+        console.log("\n");
+        reRun();
     });
+}
+
+//Helper function that prompts user to continue or end their session
+function reRun() {
+    inquirer
+        .prompt({
+            name: "restart",
+            type: "confirm",
+            message: "Do you want to continue?",
+        })
+        .then(function (answer) {
+            restart = answer.restart;
+            if (restart === true) {
+                console.log("\n");
+                startApp();
+            }
+            else {
+                console.log("\nGood-bye!")
+            }
+        });
 }
 
