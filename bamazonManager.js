@@ -171,17 +171,19 @@ function addQuantity() {
         })
         .then(function (answer) {
                 newQuantity = answer.newQuantity;
-                // createNewProduct();
+                createNewProduct();
     });
 }
 
 
-// function createNewProduct() {
-//     var query = "INSERT INTO products (product_name, department_name, price, stock_quantity, units_ordered) VALUES (" + newName + ", " + newDept + ", " + newPrice + ", " + 35 + ", 0)";
-//     connection.query(query, function (err, res) {
-//         displayProducts();
-//     });
-// };
+function createNewProduct() {
+    var query = "INSERT INTO products (product_name, department_name, price, stock_quantity, units_ordered) VALUES ('" + newName + "', '" + newDept + "', " + newPrice + ", " + newQuantity + ", 0)";
+    connection.query(query, function (err, res) {
+        console.log(query);
+        displayProducts();
+
+    });
+};
 
 function displayProducts() {
     console.log("\nInventory\n");
