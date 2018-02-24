@@ -49,9 +49,9 @@ function startApp() {
                     runSearch();
                     break;
 
-                // case "Add New Product":
-                //     songSearch();
-                //     break;
+                case "Add New Product":
+                    addProductName();
+                    break;
             }
         });
 }
@@ -123,14 +123,62 @@ function updateStockItems() {
     });
 };
 
+function addProductName() {
+    inquirer
+        .prompt({
+            name: "newName",
+            type: "input",
+            message: "What is the new product name you want to create?",
+        })
+        .then(function (answer) {
+                newName = answer.newName;
+                console.log(newName);
+                // addDeptName();
+});
+}
+// function addDeptName() {
+//     inquirer
+//         .prompt({
+//             name: "newName",
+//             type: "input",
+//             message: "What is the new product name you want to create?",
+//         })
+//         .then(function (answer) {
+//                 newName = answer.newName;
+//                 addPrice();
+// });
+// function addPrice() {
+//     inquirer
+//         .prompt({
+//             name: "newName",
+//             type: "input",
+//             message: "What is the new product name you want to create?",
+//         })
+//         .then(function (answer) {
+//                 newName = answer.newName;
+//                 addQuantity();
+// });
+
+// function addQuantity() {
+//     inquirer
+//         .prompt({
+//             name: "newName",
+//             type: "input",
+//             message: "What is the new product name you want to create?",
+//         })
+//         .then(function (answer) {
+//                 newName = answer.newName;
+//                 createNewProduct();
+// });
 
 
-function createNewProduct() {
-    var query = "INSERT INTO products (product_name, department_name, price, stock_quantity, units_ordered) VALUES ('cast iron skillet', 'Kitchen', 45.00, 35, 0)";
-    connection.query(query, id, function (err, res) {
-        displayProducts();
-    });
-};
+
+// function createNewProduct() {
+//     var query = "INSERT INTO products (product_name, department_name, price, stock_quantity, units_ordered) VALUES ('cast iron skillet', 'Kitchen', 45.00, 35, 0)";
+//     connection.query(query, function (err, res) {
+//         displayProducts();
+//     });
+// };
 
 function displayProducts() {
     console.log("\nInventory\n");
