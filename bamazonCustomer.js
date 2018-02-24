@@ -21,6 +21,7 @@ connection.connect(function (err) {
     readProducts();
 });
 
+//Helper function that displays current inventory
 function readProducts() {
     console.log("\nWelcome to Bamazon.com!\n");
     connection.query("SELECT * FROM products", function (err, res) {
@@ -30,6 +31,7 @@ function readProducts() {
     });
 }
 
+//Helper function that captures the item_id of the product user wants to buy 
 function runSearch() {
     inquirer
         .prompt({
@@ -50,6 +52,7 @@ function runSearch() {
         });
 };
 
+//Helper function that captures the number of units of the stock_quantity the user wants to buy
 function howMuch() {
     inquirer
         .prompt({
@@ -75,28 +78,24 @@ function howMuch() {
         });
 };
 
+//Helper function that captures the number of units oordered by the user
 function updateUnits() {
         var query = "UPDATE products SET units_ordered= " + order + " WHERE ?";
         connection.query(query, { item_id: id }, function (err, res) {
-            readUpdated();
+            updateStockItems();
         });
 }
 
-function readUpdated() {
-    connection.query("SELECT * FROM products", function (err, res) {
-        if (err) throw err;
-        // console.table(res);
-        updateStockItems();
-    });
-}
-
+//Helper function that updates the stock_quantity minus the units the user wants to buy
 function updateStockItems() {
     var query = "UPDATE products SET stock_quantity = stock_quantity - (SELECT   SUM(units_ordered)) WHERE item_id = ?";
     connection.query(query, id , function (err, res) {
-        readUpdatedAgain();
+        readUpdated();
     });
 }
-function readUpdatedAgain() {
+
+//Helper function that displays the newly updated inventory and displays the total price for the user
+function readUpdated() {
     connection.query("SELECT * FROM products", function (err, res) {
         if (err) throw err;
         yourTotal = price * order;
@@ -105,6 +104,8 @@ function readUpdatedAgain() {
         resetUnitsOrdered();
     });
 }
+
+//Helper function that resets the units_ordered to zero once the purchase is complete 
 function resetUnitsOrdered() {
     var query = "UPDATE products SET units_ordered = 0 WHERE item_id = ?";
     connection.query(query, id , function (err, res) {
@@ -112,6 +113,7 @@ function resetUnitsOrdered() {
     });
 }
 
+//Helper function that prompts user to continue or end their session
 function reRun() {
     inquirer
         .prompt({
