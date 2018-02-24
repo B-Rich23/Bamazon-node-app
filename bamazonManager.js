@@ -146,21 +146,21 @@ function addDeptName() {
         })
         .then(function (answer) {
                 newDept = answer.newDept;
-                // addPrice();
+                addPrice();
     });
 }
-// function addPrice() {
-//     inquirer
-//         .prompt({
-//             name: "newName",
-//             type: "input",
-//             message: "What is the new product name you want to create?",
-//         })
-//         .then(function (answer) {
-//                 newName = answer.newName;
-//                 addQuantity();
-// });
-
+function addPrice() {
+    inquirer
+        .prompt({
+            name: "newPrice",
+            type: "input",
+            message: "What is the new price you want to set?",
+        })
+        .then(function (answer) {
+                newPrice = answer.newPrice;
+                // addQuantity();
+    });
+}
 // function addQuantity() {
 //     inquirer
 //         .prompt({
@@ -176,7 +176,7 @@ function addDeptName() {
 
 
 // function createNewProduct() {
-//     var query = "INSERT INTO products (product_name, department_name, price, stock_quantity, units_ordered) VALUES (" + newName + ", " + newDept + ", " + 45.00 + ", " + 35 + ", 0)";
+//     var query = "INSERT INTO products (product_name, department_name, price, stock_quantity, units_ordered) VALUES (" + newName + ", " + newDept + ", " + newPrice + ", " + 35 + ", 0)";
 //     connection.query(query, function (err, res) {
 //         displayProducts();
 //     });
