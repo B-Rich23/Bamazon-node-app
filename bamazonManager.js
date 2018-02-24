@@ -133,20 +133,22 @@ function addProductName() {
         .then(function (answer) {
                 newName = answer.newName;
                 console.log(newName);
-                // addDeptName();
-});
+                addDeptName();
+    });
 }
-// function addDeptName() {
-//     inquirer
-//         .prompt({
-//             name: "newName",
-//             type: "input",
-//             message: "What is the new product name you want to create?",
-//         })
-//         .then(function (answer) {
-//                 newName = answer.newName;
-//                 addPrice();
-// });
+
+function addDeptName() {
+    inquirer
+        .prompt({
+            name: "newDept",
+            type: "input",
+            message: "What is the new department name you want to create?",
+        })
+        .then(function (answer) {
+                newDept = answer.newDept;
+                // addPrice();
+    });
+}
 // function addPrice() {
 //     inquirer
 //         .prompt({
@@ -174,7 +176,7 @@ function addProductName() {
 
 
 // function createNewProduct() {
-//     var query = "INSERT INTO products (product_name, department_name, price, stock_quantity, units_ordered) VALUES ('cast iron skillet', 'Kitchen', 45.00, 35, 0)";
+//     var query = "INSERT INTO products (product_name, department_name, price, stock_quantity, units_ordered) VALUES (" + newName + ", " + newDept + ", " + 45.00 + ", " + 35 + ", 0)";
 //     connection.query(query, function (err, res) {
 //         displayProducts();
 //     });
